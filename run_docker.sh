@@ -7,4 +7,4 @@ docker build -t my-flask-app .
 docker image ls
 
 # Run flask app
-docker run -it --rm --name my-running-app my-flask-app
+docker run -p 8080:5000 -it --rm --name my-running-app my-flask-app
