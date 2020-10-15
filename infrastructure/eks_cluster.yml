@@ -4,8 +4,8 @@ Description: >
 Parameters:
 
   EnvironmentName:
-        Description: An environment name that will be prefixed to resource names
-        Type: String
+    Description: An environment name that will be prefixed to resource names
+    Type: String
 
   KubernetesVersion:
     Description: The Kubernetes version to install
@@ -152,7 +152,7 @@ Resources:
       GroupDescription: Allow http to our hosts and SSH from local only
       VpcId:
         Fn::ImportValue:
-          !Sub "${EnvironmentName}-VPCID" # TODO
+          !Sub "${EnvironmentName}-VPCID"
 
   Cluster:
     Type: AWS::EKS::Cluster
