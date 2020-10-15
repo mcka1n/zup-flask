@@ -1,0 +1,14 @@
+[
+	{
+		"ParameterKey": "EnvironmentName",
+		"ParameterValue": "CloudDevOpsCapstone"
+	},
+	{
+		"ParameterKey": "NodeInstanceType",
+		"ParameterValue": "t2.small"
+	},
+	{
+		"ParameterKey": "ClusterName",
+		"ParameterValue": "CloudDevOpsCapstone-EKSCluster"
+	}
+]
