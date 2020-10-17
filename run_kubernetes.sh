@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dockerpath="."
+dockerpath="mckain/my-flask-app"
 
 # Run in Docker Hub container with kubernetes
 kubectl run flaskskearlndemo\
@@ -12,4 +12,4 @@ kubectl run flaskskearlndemo\
 kubectl get pods
 
 # Forward the container port to host
-kubectl port-forward flaskskearlndemo 5000:8080
+kubectl port-forward flaskskearlndemo 8080:5000
