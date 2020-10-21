@@ -1,0 +1,37 @@
+{
+   "kind":"ReplicationController",
+   "apiVersion":"v1",
+   "metadata":{
+      "name":"my-flask-app-new-controller",
+      "labels":{
+         "app":"my-flask-app"
+      }
+   },
+   "spec":{
+      "replicas":3,
+      "selector":{
+         "app":"my-flask-app"
+      },
+      "template":{
+         "metadata":{
+            "labels":{
+               "app":"my-flask-app"
+            }
+         },
+         "spec":{
+            "containers":[
+               {
+                  "name":"my-flask-app",
+                  "image":"mckain/my-flask-app:latest",
+                  "ports":[
+                     {
+                        "name":"http-server",
+                        "containerPort":8080
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   }
+}

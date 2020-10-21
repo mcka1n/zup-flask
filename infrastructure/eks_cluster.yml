@@ -297,7 +297,6 @@ Resources:
       IamInstanceProfile: !Ref NodeInstanceProfile
       ImageId: !Ref NodeImageIdSSMParam
       InstanceType: !Ref NodeInstanceType
-      # KeyName: !Ref KeyName
       SecurityGroups:
         - !Ref NodeSecurityGroup
       BlockDeviceMappings:
