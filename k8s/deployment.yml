@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-flask-app-new-deployment
+  labels:
+    app: my-flask-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-flask-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-flask-app
+    spec:
+      containers:
+        - image: mckain/my-flask-app:latest
+          name: my-flask-app
+          ports:
+            - containerPort: 8080
+              name: http-server
+      imagePullSecrets:
+        - name: ecr-secret
