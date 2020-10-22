@@ -266,55 +266,18 @@ Resources:
       ToPort: 443
       FromPort: 443
 
-  NodeGroup:
-    Type: AWS::AutoScaling::AutoScalingGroup
+  EKSManagedNodeGroup:
+    Type: AWS::EKS::Nodegroup
     DependsOn: Cluster
     Properties:
-      DesiredCapacity: !Ref NodeAutoScalingGroupDesiredCapacity
-      LaunchConfigurationName: !Ref NodeLaunchConfig
-      MinSize: !Ref NodeAutoScalingGroupDesiredCapacity
-      MaxSize: !Ref NodeAutoScalingGroupDesiredCapacity
-      VPCZoneIdentifier:
+      ClusterName: !Sub ${ClusterName}
+      InstanceTypes:
+        - !Ref NodeInstanceType
+      NodegroupName: !Sub ${ClusterName}-NodeGroup
+      NodeRole: !GetAtt NodeInstanceRole.Arn
+      Subnets:
         - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
         - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
-      Tags:
-        - Key: Name
-          Value: !Sub ${ClusterName}-node
-          PropagateAtLaunch: true
-        - Key: !Sub kubernetes.io/cluster/${ClusterName}
-          Value: owned
-          PropagateAtLaunch: true
-    UpdatePolicy:
-      AutoScalingRollingUpdate:
-        MaxBatchSize: 1
-        MinInstancesInService: !Ref NodeAutoScalingGroupDesiredCapacity
-        PauseTime: PT5M
-
-  NodeLaunchConfig:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Properties:
-      AssociatePublicIpAddress: true
-      IamInstanceProfile: !Ref NodeInstanceProfile
-      ImageId: !Ref NodeImageIdSSMParam
-      InstanceType: !Ref NodeInstanceType
-      SecurityGroups:
-        - !Ref NodeSecurityGroup
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvda
-          Ebs:
-            VolumeSize: !Ref NodeVolumeSize
-            VolumeType: gp2
-            DeleteOnTermination: true
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash
-            set -o xtrace
-            /etc/eks/bootstrap.sh "${ClusterName}"
-            /opt/aws/bin/cfn-signal --exit-code $? \
-                     --stack  ${AWS::StackName} \
-                     --resource NodeGroup  \
-                     --region ${AWS::Region}
 
 Outputs:
 
