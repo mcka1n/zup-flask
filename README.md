@@ -26,6 +26,8 @@ kubectl apply -f k8s/deployment.yml
 kubectl apply -f k8s/service.yml
 ```
 
+----
+
 ## Capstone Cloud DevOps specifications
 
 1. Set Up Pipeline
@@ -34,7 +36,79 @@ kubectl apply -f k8s/service.yml
 
 ### Set Up Pipeline
 
-I have created a Jenkins server (with BlueOcean) which is on charge of my Continous Integration and Continous Deployment (CI/CD). Currently I have five stages
+I have created a Jenkins server (with BlueOcean) which is on charge of my Continous Integration and Continous Deployment (CI/CD). 
+
+
+To create a Jenkins server:
+
+1. Create an AWS EC2 instance 
+2. From the AWS IAM, create a policy, group and a user (following the minimum permissions model)
+3. Generate a Key 
+
+```
+# Step 1 - Update existing packages
+sudo apt-get update
+
+# Step 2 - Install Java
+sudo apt install -y default-jdk
+
+# Step 3 - Download Jenkins package. 
+# You can go to http://pkg.jenkins.io/debian/ to see the available commands
+# First, add a key to your system
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+
+# # Step 4 - Add the following entry in your /etc/apt/sources.list:
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+# # Step 5 -Update your local package index
+sudo apt-get update
+
+# Step 6 - Install Jenkins
+sudo apt-get install -y jenkins
+
+# Step 7 - Start the Jenkins server
+sudo systemctl start jenkins
+
+# Step 8 - Enable the service to load during boot
+sudo systemctl enable jenkins
+sudo systemctl status jenkins
+
+# Step 9 - Install the project's specific dependencies
+## Docker
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt update
+apt-cache policy docker-ce
+sudo apt install docker-ce
+sudo systemctl status docker
+### Allowing the user jenkins to use the docker command
+sudo usermod -aG docker jenkins
+id -nG
+
+## hadolint
+sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_6
+sudo chmod +x /bin/hadolint
+
+## AWS CLI
+sudo apt  install awscli
+
+## Kubernetes
+sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+```
+
+Once you are done with the machine setup, set the initial password:
+
+```
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+
+Finally, about the Jenkins pipeline, currently I have five stages:
 
 1. Lint
 2. Build Container
