@@ -23,7 +23,7 @@ spec:
         - image: mckain/my-flask-app:latest
           name: my-flask-app
           ports:
-            - containerPort: 8080
+            - containerPort: 5000
               name: http-server
       imagePullSecrets:
         - name: ecr-secret
