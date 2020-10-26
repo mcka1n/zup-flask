@@ -2,6 +2,10 @@
 
 Operationalizing a [Flask](https://palletsprojects.com/p/flask/) web app
 
+The infrastructure of this project is being created using the AWS CloudFormation templates located in the [infrastructure/](../master/infrastructure) folder, these templates will create the network resources needed to spin a Kubernetes cluster (EKS)
+
+The deployment to the EKS cluster has been automated via Jenkins
+
 ## How to run it locally?
 
 1. Make sure you have Docker installed in your computer
